@@ -1,0 +1,21 @@
+{{ define "userlist/userlist-create.html" }}
+
+<html>
+    <form action="/api/user/registerUser/" method="POST">
+        <h1>Create New User</h1>
+        <div class="">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="username">
+        </div>
+        <div class="">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="password">
+        </div>
+        <div class="">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</html>
+
+
+{{ end }}

@@ -1,0 +1,16 @@
+{{ define "booklist/booklist-p.html" }}
+
+<html>
+<form action="/booklist/searchByAuthor/" method="POST">
+    <div class="">
+        <h1>Write book's author: </h1>
+        <input type="text" name="author" placeholder="author">
+    </div>
+    <div class="">
+        <input type="Submit" value="submit">
+    </div>
+</form>
+</html>
+
+
+{{ end }}
