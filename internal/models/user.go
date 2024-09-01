@@ -47,6 +47,21 @@ func CreateNewUser(user User) error {
 	return nil
 }
 
+func GetUserId(username string) (string, error) {
+	var userId string
+
+	err := database.DB.QueryRow("SELECT ID FROM Userlist WHERE Name = ?", username).Scan(&userId)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", fmt.Errorf("User not found")
+		}
+		return "", fmt.Errorf("Error getting user id: %v", err)
+	}
+
+	return userId, nil
+}
+
 func CheckUserExist(username string) (User, error) {
 	var user User
 	err := database.DB.QueryRow("SELECT * FROM Userlist WHERE Name= ?", username).Scan(&user.ID, &user.Username, &user.Password, &user.Overdue, &user.Type)
@@ -54,6 +69,42 @@ func CheckUserExist(username string) (User, error) {
 		if err == sql.ErrNoRows {
 			return user, err
 		}
+		return user, err
+	}
+
+	return user, nil
+
+}
+
+func ChangeOverdueUser(userId string) error {
+	_, err := database.DB.Exec("UPDATE Userlist SET overdue=overdue + 1 WHERE ID=?", userId)
+	if err != nil {
+		fmt.Errorf("Error updating overdue user: %v", err)
+		return err
+	}
+	return nil
+}
+func (u *User) PasswordChangeUser() error {
+	_, err := database.DB.Exec("UPDATE USERLIST SET password = ? WHERE ID = ?", u.Password, u.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Errorf("Could not find the user with the name: ", u.Username)
+		}
+	}
+
+	return nil
+}
+
+func GetCurrentUser(userId string) (User, error) {
+	var user User
+
+	err := database.DB.QueryRow("SELECT * FROM Userlist WHERE ID = ?", userId).Scan(&user.ID, &user.Username, &user.Password, &user.Overdue, &user.Type)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Errorf("The User doesn't not exist %v", err)
+			return user, err
+		}
+		fmt.Errorf("Error getting current user: %v", err)
 		return user, err
 	}
 

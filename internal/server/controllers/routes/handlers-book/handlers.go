@@ -16,7 +16,10 @@ func InitRoutes(server *gin.Engine) {
 		booklist.GET("/getHeader", controllers.HandleHeader)
 		secured := booklist.Group("/secured").Use(middlewares.Auth())
 		{
-			secured.GET("/register", controllers.HandleRegisterNewBook)
+			secured.POST("/borrow", controllers.BorrowBookFromBooklist)
+			secured.POST("/extend", controllers.ExtendBookDeadline)
+			secured.POST("/checkDeadline", controllers.CheckBookDeadline)
+			secured.POST("/return", controllers.ReturnBookLibrary)
 		}
 	}
 }

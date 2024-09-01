@@ -47,7 +47,13 @@ func GenerateToken(c *gin.Context) {
 		return
 	}
 
-	tokenString, err := utils.GenerateJWT(user.Username)
+	userId, err := models.GetUserId(request.Username)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"Error occured while searching for UserId ": err.Error()})
+	}
+
+	tokenString, err := utils.GenerateJWT(user.Username, userId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		c.Abort()

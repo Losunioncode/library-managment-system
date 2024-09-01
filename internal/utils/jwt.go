@@ -10,13 +10,15 @@ import (
 var jwtKey = []byte(database.GetEnvDB()[2])
 
 type JWTClaim struct {
+	UserId   string `json:"user_id"`
 	Username string `json:"username"`
 	jwt.RegisteredClaims
 }
 
-func GenerateJWT(username string) (tokenString string, err error) {
+func GenerateJWT(username, userId string) (tokenString string, err error) {
 	expiritaionTime := time.Now().Add(1 * time.Hour)
 	claims := &JWTClaim{
+		UserId:   userId,
 		Username: username,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expiritaionTime),
@@ -29,7 +31,7 @@ func GenerateJWT(username string) (tokenString string, err error) {
 
 }
 
-func ValidateToken(signedToken string) (err error) {
+func ValidateToken(signedToken string) (err error, userId string) {
 	token, err := jwt.ParseWithClaims(
 		signedToken,
 		&JWTClaim{},
@@ -42,6 +44,7 @@ func ValidateToken(signedToken string) (err error) {
 	}
 
 	claims, ok := token.Claims.(*JWTClaim)
+	userId = claims.UserId
 	if !ok {
 		err = errors.New("couldn't parse claims")
 		return

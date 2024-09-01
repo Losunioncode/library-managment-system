@@ -26,11 +26,12 @@ func GetEnvDB() []string {
 
 func InitDB() {
 	cfg := mysql.Config{
-		User:   GetEnvDB()[0],
-		Passwd: GetEnvDB()[1],
-		Net:    "tcp",
-		Addr:   "127.0.0.1:3306",
-		DBName: "bookshelf",
+		User:      GetEnvDB()[0],
+		Passwd:    GetEnvDB()[1],
+		Net:       "tcp",
+		Addr:      "127.0.0.1:3306",
+		DBName:    "bookshelf",
+		ParseTime: true,
 	}
 
 	var err error

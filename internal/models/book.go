@@ -12,7 +12,7 @@ type BookSample struct {
 	Author     string         `json:"author"`
 	Publisher  string         `json:"publisher"`
 	Stock      int64          `json:"stock"`
-	Available  int64          `json:"avaible"`
+	Available  int64          `json:"available"`
 	RemoveInfo sql.NullString `json:"remove_info"`
 }
 
